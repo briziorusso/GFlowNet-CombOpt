@@ -17,7 +17,8 @@ and design efficient GFlowNet algorithms to tackle them.
 
 ```bash
 pip install hydra-core==1.1.0 omegaconf submitit hydra-submitit-launcher
-pip install dgl==0.6.1
+pip install dgl
+pip install ipdb
 ```
 
 ## Data generation

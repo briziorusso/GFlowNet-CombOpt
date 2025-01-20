@@ -10,8 +10,17 @@ from torch.utils.data import Dataset, DataLoader
 import dgl
 
 
+def read_gpickle(graph_path):
+    with open(graph_path, "rb") as f:
+        g = pickle.load(f)
+    return g
+
+def write_gpickle(graph, graph_path):
+    with open(graph_path, "wb") as f:
+        pickle.dump(graph, f, pickle.HIGHEST_PROTOCOL)
+
 def read_dgl_from_graph(graph_path):
-    _g = nx.read_gpickle(graph_path)
+    _g = read_gpickle(graph_path)
     labelled = "optimal" in graph_path.name or "non-optimal" in graph_path.name
     if labelled:
         g = dgl.from_networkx(_g, node_attrs=['label'])
@@ -76,12 +85,12 @@ def _prepare_instance(source_instance_file: pathlib.Path, cache_directory: pathl
             return  # we already have an up2date version of that file as matrix
 
     try:
-        g = nx.read_gpickle(source_instance_file)
+        g = read_gpickle(source_instance_file)
     except:
         print(f"Failed to read {source_instance_file}.")
         return
     g.remove_edges_from(nx.selfloop_edges(g)) # remove self loops
-    nx.write_gpickle(g, dest_path)
+    write_gpickle(g, dest_path)
     print(f"Updated graph file: {source_instance_file}.")
 
 def get_data_loaders(cfg):

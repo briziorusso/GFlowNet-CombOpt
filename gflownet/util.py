@@ -140,7 +140,7 @@ class MaxIndSetMDP(GraphCombOptMDP):
     def get_log_reward(self):
         state = pad_batch(self._state, self.numnode_per_graph, padding_value=2)
         sol = (state == 1).sum(dim=1).float()
-        return sol
+        return sol ## size of the decided set
 
     def batch_metric(self, vec_state):
         state_per_graph = torch.split(vec_state, self.numnode_per_graph, dim=0)
